@@ -5,8 +5,8 @@ const WelcomePage = (props) => {
   const { loggedIn, email } = props;
   const navigate = useNavigate();
 
-  const onButtonClick = () => {
-    // You'll update this function later
+  const onButtonClick = (buttonType) => {
+    buttonType == "login" ? navigate("/login") : navigate("/register");
   };
 
   return (
@@ -19,13 +19,13 @@ const WelcomePage = (props) => {
         <input
           className={"inputButton"}
           type="button"
-          onClick={onButtonClick}
+          onClick={() => onButtonClick("login")}
           value={loggedIn ? "Logout" : "Login"}
         />
         <input
           className={"inputButton"}
           type="button"
-          onClick={onButtonClick}
+          onClick={() => onButtonClick("register")}
           value={"Register"}
         />
         {loggedIn ? <div>Your email address is {email}</div> : <div />}
