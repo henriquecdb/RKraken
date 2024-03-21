@@ -22,6 +22,12 @@ const WelcomePage = (props) => {
           onClick={onButtonClick}
           value={loggedIn ? "Logout" : "Login"}
         />
+        <input
+          className={"inputButton"}
+          type="button"
+          onClick={onButtonClick}
+          value={"Register"}
+        />
         {loggedIn ? <div>Your email address is {email}</div> : <div />}
       </div>
     </div>
