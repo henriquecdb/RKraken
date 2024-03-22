@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import "./ProblemPage.css";
 
 const WelcomePage = (props) => {
   const { loggedIn, email } = props;

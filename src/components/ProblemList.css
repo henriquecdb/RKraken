@@ -1,0 +1,14 @@
+.list div {
+  margin-bottom: 2px;
+}
+
+.list a,
+.list .navlink-active {
+  text-decoration: none;
+  color: inherit;
+}
+
+.list a:hover,
+.list .navlink-active:hover {
+  color: blue;
+}

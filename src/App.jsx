@@ -4,6 +4,8 @@ import LoginPage from "./components/LoginPage";
 import "./App.css";
 import { useEffect, useState } from "react";
 import RegisterPage from "./components/RegisterPage";
+import ProblemPage from "./components/ProblemPage";
+import ProblemList from "./components/ProblemList";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -30,6 +32,8 @@ function App() {
             }
           />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/problem" element={<ProblemPage />} />
+          <Route path="/problemlist" element={<ProblemList />} />
         </Routes>
       </BrowserRouter>
     </div>
