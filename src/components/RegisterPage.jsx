@@ -49,7 +49,25 @@ const RegisterPage = () => {
       return;
     }
 
-    // Registration calls will be made here...
+    fetch("http://localhost:5173/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        password: password,
+      }),
+    })
+      .then((response) => response.text())
+      .then((data) => {
+        console.log(data);
+        navigate("/login");
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
 
   return (
