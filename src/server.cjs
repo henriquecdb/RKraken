@@ -51,3 +51,30 @@ app.post("/register", (req, res) => {
     });
   });
 });
+
+app.post("/login", (req, res) => {
+  const { email, password } = req.body;
+
+  const sqlSelect = "SELECT * FROM users WHERE email = ?";
+  db.query(sqlSelect, [email], (error, result) => {
+    if (error) {
+      console.error("Database selection failed:", error.stack);
+      return;
+    }
+
+    if (result.length > 0) {
+      bcrypt.compare(password, result[0].password, (error, response) => {
+        if (response) {
+          res.send({ loggedIn: true, user: result[0] });
+        } else {
+          res.send({
+            loggedIn: false,
+            message: "Wrong username/password combination!",
+          });
+        }
+      });
+    } else {
+      res.send({ loggedIn: false, message: "User doesn't exist" });
+    }
+  });
+});

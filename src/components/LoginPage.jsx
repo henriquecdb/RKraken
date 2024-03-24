@@ -33,7 +33,27 @@ const LoginPage = (props) => {
       return;
     }
 
-    // Authentication calls will be made here...
+    fetch("http://localhost:5173/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.loggedIn) {
+          navigate("/");
+        } else {
+          alert(data.message);
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
 
   return (
@@ -54,6 +74,7 @@ const LoginPage = (props) => {
       <br />
       <div className={"inputContainer"}>
         <input
+          type="password"
           value={password}
           placeholder="Enter your password here"
           onChange={(ev) => setPassword(ev.target.value)}

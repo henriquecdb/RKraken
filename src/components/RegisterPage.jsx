@@ -98,6 +98,7 @@ const RegisterPage = () => {
       <br />
       <div className={"inputContainer"}>
         <input
+          type="password"
           value={password}
           placeholder="Enter your password here"
           onChange={(ev) => setPassword(ev.target.value)}
@@ -108,6 +109,7 @@ const RegisterPage = () => {
       <br />
       <div className={"inputContainer"}>
         <input
+          type="password"
           value={confirmPassword}
           placeholder="Confirm your password here"
           onChange={(ev) => setConfirmPassword(ev.target.value)}
