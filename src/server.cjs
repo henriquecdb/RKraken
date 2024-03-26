@@ -8,11 +8,12 @@ const nodemailer = require("nodemailer");
 const app = express();
 
 function sendEmail(to, subject, text) {
-  let transporter = nodemailer.createTransport({
-    service: "gmail",
+  var transporter = nodemailer.createTransport({
+    host: "sandbox.smtp.mailtrap.io",
+    port: 2525,
     auth: {
-      user: process.env.EMAIL,
-      pass: process.env.PASSWORD,
+      user: process.env.MAILTRAP_USER,
+      pass: process.env.MAILTRAP_PASS,
     },
   });
 
