@@ -2,9 +2,35 @@ const express = require("express");
 const cors = require("cors");
 const mysql = require("mysql");
 const bcrypt = require("bcryptjs");
+const nodemailer = require("nodemailer");
 // talvez seja necessário trocar o require das importaçõs para import
 
 const app = express();
+
+function sendEmail(to, subject, text) {
+  let transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.EMAIL,
+      pass: process.env.PASSWORD,
+    },
+  });
+
+  let mailOptions = {
+    from: process.env.EMAIL,
+    to: to,
+    subject: subject,
+    text: text,
+  };
+
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Email sent: " + info.response);
+    }
+  });
+}
 
 app.use(cors());
 app.use(express.json());
@@ -46,7 +72,11 @@ app.post("/register", (req, res) => {
         console.error("Database insertion failed:", error.stack);
         return;
       }
-
+      sendEmail(
+        email,
+        "Bem-vindo ao nosso site!",
+        "Obrigado por se registrar."
+      );
       res.send("User registered successfully.");
     });
   });
