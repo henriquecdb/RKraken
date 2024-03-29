@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "./Header";
+import Footer from "./Footer";
 
 function ProblemPage() {
   return (
@@ -18,6 +19,7 @@ function ProblemPage() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }
