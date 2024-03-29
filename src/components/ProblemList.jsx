@@ -2,6 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import Header from "./Header";
 import "./ProblemList.css"
+import Footer from "./Footer";
 
 function ProblemList() {
   return (
@@ -25,6 +26,7 @@ function ProblemList() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }
