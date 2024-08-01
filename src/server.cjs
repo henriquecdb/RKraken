@@ -9,16 +9,17 @@ const app = express();
 
 function sendEmail(to, subject, text) {
   var transporter = nodemailer.createTransport({
-    host: "sandbox.smtp.mailtrap.io",
-    port: 2525,
-    auth: {
-      user: process.env.MAILTRAP_USER,
-      pass: process.env.MAILTRAP_PASS,
-    },
+      // host: "sandbox.smtp.mailtrap.io",
+      host: "mail.smtpbucket.com",
+      port: 8025,
+      // auth: {
+      //     user: process.env.MAILTRAP_USER,
+      //     pass: process.env.MAILTRAP_PASS,
+      // },
   });
 
   let mailOptions = {
-    from: process.env.EMAIL,
+    from: "testecefet@mail.com",
     to: to,
     subject: subject,
     text: text,
@@ -36,8 +37,8 @@ function sendEmail(to, subject, text) {
 app.use(cors());
 app.use(express.json());
 
-app.listen(5173, () => {
-  console.log("Server is running on port 5173");
+app.listen(3000, () => {
+  console.log("Server is running on port 3000");
 });
 
 require("dotenv").config();

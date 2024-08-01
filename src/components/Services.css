@@ -1,0 +1,43 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+}
+
+.contest-table {
+    width: 40%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 18px;
+    text-align: left;
+    border: 1px solid black;
+}
+
+.contest-table th,
+.contest-table td {
+    padding: 12px 15px;
+    border: 1px solid black;
+}
+
+.contest-table th {
+    background-color: #f2f2f2;
+}
+
+.contest-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.contest-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: blue;
+}
