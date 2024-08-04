@@ -110,3 +110,16 @@ app.post("/login", (req, res) => {
     }
   });
 });
+
+// postman get http://localhost:3000/users
+app.get("/users", (req, res) => {
+    const sqlSelect = "SELECT name FROM users";
+    db.query(sqlSelect, (error, result) => {
+        if (error) {
+            console.error("Database selection failed:", error.stack);
+            res.status(500).send("Failed to retrieve users");
+            return;
+        }
+        res.json(result);
+    });
+});
