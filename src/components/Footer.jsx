@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <footer className="footer">
       <hr />
-      <p>© 2024 Kraken. Todos os direitos reservados.</p>
+      <p>© 2024 Kraken. All rights reserved.</p>
     </footer>
   );
 };
