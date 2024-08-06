@@ -16,25 +16,8 @@ function App() {
         <div className="App">
             <BrowserRouter>
                 <Routes>
-                    <Route
-                        path="/"
-                        element={
-                            <WelcomePage
-                                email={email}
-                                loggedIn={loggedIn}
-                                setLoggedIn={setLoggedIn}
-                            />
-                        }
-                    />
-                    <Route
-                        path="/login"
-                        element={
-                            <LoginPage
-                                setLoggedIn={setLoggedIn}
-                                setEmail={setEmail}
-                            />
-                        }
-                    />
+                    <Route path="/" element={<WelcomePage />} />
+                    <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="/problem" element={<ProblemPage />} />
                     <Route path="/problemlist" element={<ProblemList />} />
