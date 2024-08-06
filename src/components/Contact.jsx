@@ -1,7 +1,8 @@
 import React from "react";
 import Header from "./Header";
 import Footer from "./Footer";
-import logo from "../assets/logokt.png"
+import logo from "../assets/logokt.png";
+import emailC from "../assets/emailSVG.svg";
 
 function Contact() {
 
