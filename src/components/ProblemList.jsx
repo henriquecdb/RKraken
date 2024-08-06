@@ -3,8 +3,15 @@ import { NavLink } from "react-router-dom";
 import Header from "./Header";
 import "./ProblemList.css"
 import Footer from "./Footer";
+import { getDataStorage } from "./Storage";
 
 function ProblemList() {
+  const loggedIn = getDataStorage("logged");
+
+  if(!loggedIn) {
+
+  }
+  
   return (
     <div className="general">
       <Header />
