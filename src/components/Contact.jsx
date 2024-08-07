@@ -72,7 +72,7 @@ function Contact() {
                                     value={formData.message}
                                     onChange={handleChange}
                                     required
-                                    placeholder="type your message"
+                                    placeholder="Type your message"
                                 />
 
     
