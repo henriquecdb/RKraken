@@ -5,7 +5,6 @@ import logo from "../assets/logokt.png";
 import emailC from "../assets/emailSVG.svg";
 
 function Contact() {
-
     const [formData, setFormData] = React.useState({
         name: "",
         email: "",
@@ -16,11 +15,24 @@ function Contact() {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData);
+        try {
+            const response = await fetch("http://localhost:3000/send-email", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            });
+            const result = await response.json();
+            console.log(result);
+            alert("Email sent successfully!");
+        } catch (error) {
+            console.error("Error sending email:", error);
+            alert("Failed to send email.");
+        }
     };
-
 
     return (
         <div>
@@ -34,10 +46,11 @@ function Contact() {
                     <div className="texto">
                         <h1>Contact Us</h1>
                         <p>
-                            If you have any questions or suggestions, please contact us through the email below:
+                            If you have any questions or suggestions, please
+                            contact us through the email below:
                         </p>
 
-                        <div class="emailContainer">
+                        <div className="emailContainer">
                             <img src={emailC} alt="emailC" />
                             <h4>contact.rkraken@gmail.com</h4>
                         </div>
@@ -75,14 +88,11 @@ function Contact() {
                                     placeholder="Type your message"
                                 />
 
-    
-    
-                                <div className={"inputContainer"}>
+                                <div className="inputContainer">
                                     <input
-                                        className={"inputButton"}
-                                        type="button"
-                                        onClick=""
-                                        value={"Send Message"}
+                                        className="inputButton"
+                                        type="submit"
+                                        value="Send Message"
                                         id="Buttons"
                                     />
                                 </div>
@@ -92,7 +102,6 @@ function Contact() {
                 </div>
             </div>
             <Footer />
-
         </div>
     );
 }
