@@ -34,7 +34,7 @@
 }
 
 .buttonContainer {
-  display: inline-block; 
+  display: inline-block;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -48,7 +48,7 @@
   margin-bottom: 2px;
 }
 
-.inputContainer > .errorLabel {
+.inputContainer>.errorLabel {
   color: red;
   font-size: 12px;
 }
@@ -94,9 +94,44 @@
   box-sizing: border-box;
   text-align: center;
   padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.imagem img{
+.imagem img {
   height: 450px;
   align-self: center;
 }
+
+.emailContainer {
+  display: flex;
+  align-items: center;
+  margin-top: -20px;
+}
+
+.emailContainer img {
+  max-width: 100%;
+  margin-right: 10px;
+  height: 25px;
+}
+
+.formContainer form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.formContainer input, .formContainer textarea {
+  height: 48px;
+  width: 400px;
+  font-size: large;
+  border-radius: 8px;
+  border: 1px solid grey;
+  padding-left: 8px;
+  margin-top: 3px;
+  margin-bottom: 3px;
+}
+
+
