@@ -9,8 +9,8 @@ import logo from "../assets/logokt.png"
 const WelcomePage = () => {
     const loggedIn = getDataStorage("logged");
     const email = getDataStorage("email");
+    const username = getDataStorage("username");
 
-    console.log(email);
     const navigate = useNavigate();
 
     const onButtonClick = (buttonType) => {
@@ -30,7 +30,7 @@ const WelcomePage = () => {
                     <img src={logo} alt={"logo"} />
             </div>
                 <div className={"titleContainer"}>
-                    <div>Welcome to Arena, rebyata!</div>
+                    <div>Welcome to Arena, {loggedIn ? (username) : ("rebyata")}!</div>
                 </div>
                 {/* <div>This is the home page.</div> */}
                 <div className={"buttonContainer"}>
@@ -41,17 +41,17 @@ const WelcomePage = () => {
                         value={loggedIn ? "Logout" : "Login"}
                         id="Buttons"
                     />
-                    <input
-                        className={"inputButton"}
-                        type="button"
-                        onClick={() => onButtonClick("register")}
-                        value={"Register"}
-                        id="Buttons"
-                    />
+                    
                     {loggedIn ? (
-                        <div>Your email address is {email}</div>
+                        <div></div>
                     ) : (
-                        <div />
+                        <input
+                            className={"inputButton"}
+                            type="button"
+                            onClick={() => onButtonClick("register")}
+                            value={"Register"}
+                            id="Buttons"
+                        />
                     )}
                 </div>
             </div>
