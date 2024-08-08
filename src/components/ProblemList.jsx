@@ -1,19 +1,15 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Header from "./Header";
 import "./ProblemList.css"
 import Footer from "./Footer";
-import { getDataStorage } from "./Storage";
+import { getDataStorage, setDataStorage } from "./Storage";
 import { useState, useEffect } from "react";
 
 function ProblemList() {
   const loggedIn = getDataStorage("logged");
-
-  if(!loggedIn) {
-
-  }
   
-  const [data, setData] = useState();
+  const [data, setData] = useState([]);
   const [refreshing, setRefreshing] = useState(true);
 
   useEffect(() => {
@@ -44,19 +40,6 @@ function ProblemList() {
     }
   });
 
-  if(data) {
-    console.log(data);
-  }
-
-  function displayProblems(data) {
-    forEach(item => {
-      const dataItem = document.createElement('div', className = "general");
-      
-      const navlink = document.createElement('NavLink');
-      navlink.textContent = `${item.id}. ${item.name}`; 
-    })
-  }
-
   return (
 
     <div className="general">
@@ -64,24 +47,16 @@ function ProblemList() {
       <div className="container">
         <div className="square">
           <div className="list">
-            <div>
-              <NavLink to="/problemA">A. Problem A</NavLink>
-            </div>
-            <div>
-              <NavLink to="/problemB">B. Problem B</NavLink>
-            </div>
-            <div>
-              <NavLink to="/problemC">C. Problem C</NavLink>
-            </div>
-            <div>
-              <NavLink to="/problemD">D. Problem D</NavLink>
-            </div>
+            {data.map((item, i) => (
+              <div key={item.id}>
+                <Link to="/problem" state={{id : item.id}}>{item.id}. {item.name}</Link>
+              </div>
+            ))}
           </div>
         </div>
       </div>
       <Footer />
     </div> 
-    
     
   );
 }
