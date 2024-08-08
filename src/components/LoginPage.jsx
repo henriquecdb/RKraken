@@ -3,8 +3,10 @@ import { useNavigate } from "react-router-dom";
 import logo from "../assets/escritaokt.png";
 import Header from "./Header";
 import Footer from "./Footer";
+import { setDataStorage, getDataStorage } from "./Storage";
 
-const LoginPage = (props) => {
+const LoginPage = () => {
+    const loggedIn = getDataStorage("logged");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [emailError, setEmailError] = useState("");
@@ -49,6 +51,8 @@ const LoginPage = (props) => {
             .then((response) => response.json())
             .then((data) => {
                 if (data.loggedIn) {
+                    setDataStorage("logged", true);
+                    setDataStorage("email", email);
                     navigate("/");
                 } else {
                     alert(data.message);

@@ -1,16 +1,25 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
+import { getDataStorage, clearAllStorage } from "./Storage";
 import Header from "./Header";
 import Footer from "./Footer";
 // import "./ProblemPage.css";
 import logo from "../assets/logokt.png"
 
-const WelcomePage = (props) => {
-    const { loggedIn, email } = props;
+const WelcomePage = () => {
+    const loggedIn = getDataStorage("logged");
+    const email = getDataStorage("email");
+
+    console.log(email);
     const navigate = useNavigate();
 
     const onButtonClick = (buttonType) => {
-        buttonType == "login" ? navigate("/login") : navigate("/register");
+        if(buttonType == "logout") {
+            clearAllStorage();
+            navigate("/");
+        } else {
+            buttonType == "login" ? navigate("/login") : navigate("/register");
+        }
     };
 
     return (
@@ -28,7 +37,7 @@ const WelcomePage = (props) => {
                     <input
                         className={"inputButton"}
                         type="button"
-                        onClick={() => onButtonClick("login")}
+                        onClick={loggedIn ? () => onButtonClick("logout") : () => onButtonClick("login")}
                         value={loggedIn ? "Logout" : "Login"}
                         id="Buttons"
                     />
