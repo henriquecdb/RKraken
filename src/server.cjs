@@ -136,3 +136,17 @@ app.get("/problems", async (req, res) => {
       res.json(result);
   });
 });
+
+// Buscar problema baseado no id
+app.get("/problems/:id", async (req, res) => {
+  const id = [req.params.id];
+  const sqlSelect = "SELECT * FROM problems WHERE id = ?";
+  db.query(sqlSelect, [id], (error, result) => {
+      if (error) {
+          console.error("Database selection failed:", error.stack);
+          res.status(500).send("Failed to retrieve problem");
+          return;
+      }
+      res.json(result);
+  });
+});
