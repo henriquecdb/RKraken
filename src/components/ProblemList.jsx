@@ -4,6 +4,7 @@ import Header from "./Header";
 import "./ProblemList.css"
 import Footer from "./Footer";
 import { getDataStorage } from "./Storage";
+import { useState, useEffect } from "react";
 
 function ProblemList() {
   const loggedIn = getDataStorage("logged");
@@ -12,7 +13,52 @@ function ProblemList() {
 
   }
   
+  const [data, setData] = useState();
+  const [refreshing, setRefreshing] = useState(true);
+
+  useEffect(() => {
+    async function fetchList() {
+      setRefreshing(true);
+      
+      let requestOptions = {
+        method: 'GET',
+        headers: {
+          "Content-Type": "application/json",
+      },
+        redirect: 'follow',
+      };
+
+      fetch(
+        'http://localhost:3000/problems',
+        requestOptions
+      )
+        .then((res) => res.json())
+        .then((resJson) => {
+          setData(resJson);
+          setRefreshing(false);
+        })
+        .catch((e) => console.log(e));
+    }
+    if(refreshing) {
+      fetchList();
+    }
+  });
+
+  if(data) {
+    console.log(data);
+  }
+
+  function displayProblems(data) {
+    forEach(item => {
+      const dataItem = document.createElement('div', className = "general");
+      
+      const navlink = document.createElement('NavLink');
+      navlink.textContent = `${item.id}. ${item.name}`; 
+    })
+  }
+
   return (
+
     <div className="general">
       <Header />
       <div className="container">
@@ -34,7 +80,9 @@ function ProblemList() {
         </div>
       </div>
       <Footer />
-    </div>
+    </div> 
+    
+    
   );
 }
 
