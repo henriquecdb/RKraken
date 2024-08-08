@@ -18,9 +18,14 @@ function Header() {
           <li>
             <NavLink to="/">[ Home ]</NavLink>
           </li>
-          <li>
-            <NavLink to={problemListHeader}>[ Problems ]</NavLink>
-          </li>
+          {loggedIn ? (
+                        <li>
+                          <NavLink to={problemListHeader}>[ Problems ]</NavLink>
+                        </li>
+                    ) : (
+                      <></>
+                    )}
+          
           <li>
             <NavLink to="/about">[ About ]</NavLink>
           </li>
