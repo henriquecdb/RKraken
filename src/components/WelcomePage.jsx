@@ -1,6 +1,6 @@
-import React , { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { getDataStorage, useLocalStorage, clearAllStorage } from "./Storage";
+import React from "react";
+import { useNavigate} from "react-router-dom";
+import { getDataStorage, clearAllStorage } from "./Storage";
 import Header from "./Header";
 import Footer from "./Footer";
 // import "./ProblemPage.css";
