@@ -123,3 +123,16 @@ app.get("/users", (req, res) => {
         res.json(result);
     });
 });
+
+// Buscar todos os problemas
+app.get("/problems", async (req, res) => {
+  const sqlSelect = "SELECT * FROM problems";
+  db.query(sqlSelect, (error, result) => {
+      if (error) {
+          console.error("Database selection failed:", error.stack);
+          res.status(500).send("Failed to retrieve problems");
+          return;
+      }
+      res.json(result);
+  });
+});
