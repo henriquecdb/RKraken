@@ -69,25 +69,38 @@ db.connect((error) => {
 app.post("/register", (req, res) => {
     const { name, email, password } = req.body;
 
-    bcrypt.hash(password, 10, (error, hash) => {
+    const sqlCheckEmail = "SELECT * FROM users WHERE email = ?";
+    db.query(sqlCheckEmail, [email], (error, results) => {
         if (error) {
-            console.error("Bcrypt hashing failed:", error.stack);
-            return;
+            console.error("Database query failed:", error.stack);
+            return res.status(500).send("Erro no servidor.");
         }
 
-        const sqlInsert =
-            "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
-        db.query(sqlInsert, [name, email, hash], (error, result) => {
+        if (results.length > 0) {
+            return res.status(400).send("Email já cadastrado.");
+        }
+
+        bcrypt.hash(password, 10, (error, hash) => {
             if (error) {
-                console.error("Database insertion failed:", error.stack);
-                return;
+                console.error("Bcrypt hashing failed:", error.stack);
+                return res.status(500).send("Erro ao criptografar senha.");
             }
-            sendEmail(
-                email,
-                "Bem-vindo ao nosso site!",
-                "Obrigado por se registrar."
-            );
-            res.send("User registered successfully.");
+
+            const sqlInsert =
+                "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
+            db.query(sqlInsert, [name, email, hash], (error, result) => {
+                if (error) {
+                    console.error("Database insertion failed:", error.stack);
+                    return res.status(500).send("Erro ao registrar usuário.");
+                }
+
+                sendEmail(
+                    email,
+                    "Bem-vindo ao nosso site!",
+                    "Obrigado por se registrar."
+                );
+                res.send("Usuário registrado com sucesso.");
+            });
         });
     });
 });
@@ -134,27 +147,27 @@ app.get("/users", (req, res) => {
 
 // Buscar todos os problemas
 app.get("/problems", async (req, res) => {
-  const sqlSelect = "SELECT * FROM problems";
-  db.query(sqlSelect, (error, result) => {
-      if (error) {
-          console.error("Database selection failed:", error.stack);
-          res.status(500).send("Failed to retrieve problems");
-          return;
-      }
-      res.json(result);
-  });
+    const sqlSelect = "SELECT * FROM problems";
+    db.query(sqlSelect, (error, result) => {
+        if (error) {
+            console.error("Database selection failed:", error.stack);
+            res.status(500).send("Failed to retrieve problems");
+            return;
+        }
+        res.json(result);
+    });
 });
 
 // Buscar problema baseado no id
 app.get("/problems/:id", async (req, res) => {
-  const id = [req.params.id];
-  const sqlSelect = "SELECT * FROM problems WHERE id = ?";
-  db.query(sqlSelect, [id], (error, result) => {
-      if (error) {
-          console.error("Database selection failed:", error.stack);
-          res.status(500).send("Failed to retrieve problem");
-          return;
-      }
-      res.json(result);
-  });
+    const id = [req.params.id];
+    const sqlSelect = "SELECT * FROM problems WHERE id = ?";
+    db.query(sqlSelect, [id], (error, result) => {
+        if (error) {
+            console.error("Database selection failed:", error.stack);
+            res.status(500).send("Failed to retrieve problem");
+            return;
+        }
+        res.json(result);
+    });
 });
