@@ -8,9 +8,9 @@ import ProblemList from "./components/ProblemList";
 import Services from "./components/Services";
 import About from "./components/About";
 import Contact from "./components/Contact";
+import Recover from "./components/Recover";
 
 function App() {
-
     return (
         <div className="App">
             <BrowserRouter>
@@ -23,8 +23,7 @@ function App() {
                     <Route path="/services" element={<Services />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/contact" element={<Contact />} />
-                    
-                    
+                    <Route path="/recover" element={<Recover />} />
                 </Routes>
             </BrowserRouter>
         </div>

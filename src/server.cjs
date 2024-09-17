@@ -171,3 +171,74 @@ app.get("/problems/:id", async (req, res) => {
         res.json(result);
     });
 });
+
+app.post("/recover", (req, res) => {
+    const { email, currentPassword, newPassword } = req.body;
+
+    const sqlSelect = "SELECT * FROM users WHERE email = ?";
+    db.query(sqlSelect, [email], (error, result) => {
+        if (error) {
+            console.error("Database selection failed:", error.stack);
+            return res
+                .status(500)
+                .json({ success: false, message: "Erro no servidor." });
+        }
+
+        if (result.length === 0) {
+            return res
+                .status(400)
+                .json({ success: false, message: "Usuário não encontrado." });
+        }
+
+        bcrypt.compare(
+            currentPassword,
+            result[0].password,
+            (err, compareResult) => {
+                if (err) {
+                    console.error("Bcrypt comparison failed:", err.stack);
+                    return res.status(500).json({
+                        success: false,
+                        message: "Erro ao comparar senhas.",
+                    });
+                }
+
+                if (!compareResult) {
+                    return res.status(400).json({
+                        success: false,
+                        message: "Senha atual incorreta.",
+                    });
+                }
+
+                bcrypt.hash(newPassword, 10, (error, hash) => {
+                    if (error) {
+                        console.error("Bcrypt hashing failed:", error.stack);
+                        return res.status(500).json({
+                            success: false,
+                            message: "Erro ao criptografar nova senha.",
+                        });
+                    }
+
+                    const sqlUpdate =
+                        "UPDATE users SET password = ? WHERE email = ?";
+                    db.query(sqlUpdate, [hash, email], (error, result) => {
+                        if (error) {
+                            console.error(
+                                "Database update failed:",
+                                error.stack
+                            );
+                            return res.status(500).json({
+                                success: false,
+                                message: "Erro ao atualizar a senha.",
+                            });
+                        }
+
+                        res.json({
+                            success: true,
+                            message: "Senha alterada com sucesso.",
+                        });
+                    });
+                });
+            }
+        );
+    });
+});

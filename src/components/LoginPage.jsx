@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import logo from "../assets/escritaokt.png";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -74,9 +74,7 @@ const LoginPage = () => {
                     </a>
                 </div>
 
-                <div className={"titleContainer"}>
-                    {/*<div>Login</div>*/}
-                </div>
+                <div className={"titleContainer"}>{/*<div>Login</div>*/}</div>
                 <br />
                 <div className={"inputContainer"}>
                     <input
@@ -97,6 +95,11 @@ const LoginPage = () => {
                         className={"inputBox"}
                     />
                     <label className="errorLabel">{passwordError}</label>
+                </div>
+                <div className="inputContainer">
+                    <Link to="/recover">
+                        Forgot your password? Change it here
+                    </Link>
                 </div>
                 <br />
                 <div className={"inputContainer"}>
