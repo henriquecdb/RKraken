@@ -97,7 +97,7 @@ const LoginPage = () => {
                     <label className="errorLabel">{passwordError}</label>
                 </div>
                 <div className="inputContainer">
-                    <Link to="/recover">
+                    <Link to="/emailverification">
                         Forgot your password? Change it here
                     </Link>
                 </div>

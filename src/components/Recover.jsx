@@ -1,9 +1,12 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import logo from "../assets/escritaokt.png";
 import Header from "./Header";
 import Footer from "./Footer";
 
 const Recover = () => {
+    const location = useLocation();
+    const recoverEmail = location.state.email;
     const [email, setEmail] = useState("");
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
@@ -18,37 +21,32 @@ const Recover = () => {
         setCurrentPasswordError("");
         setNewPasswordError("");
 
-        if ("" === email) {
-            setEmailError("Please enter your email");
-            return;
-        }
-
-        if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
-            setEmailError("Please enter a valid email");
-            return;
-        }
-
         if ("" === currentPassword) {
-            setCurrentPasswordError("Please enter your current password");
+            setCurrentPasswordError("Please enter a new password");
             return;
         }
 
         if (currentPassword.length < 7) {
             setCurrentPasswordError(
-                "The current password must be 8 characters or longer"
+                "The password must be 8 characters or longer"
             );
             return;
         }
 
         if ("" === newPassword) {
-            setNewPasswordError("Please enter a new password");
+            setNewPasswordError("Please enter your new password again");
             return;
         }
 
         if (newPassword.length < 7) {
             setNewPasswordError(
-                "The new password must be 8 characters or longer"
+                "The password must be 8 characters or longer"
             );
+            return;
+        }
+
+        if (newPassword != currentPassword) {
+            setNewPasswordError("Passwords must be the same");
             return;
         }
 
@@ -58,7 +56,7 @@ const Recover = () => {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                email: email,
+                email: recoverEmail,
                 currentPassword: currentPassword,
                 newPassword: newPassword,
             }),
@@ -82,22 +80,17 @@ const Recover = () => {
         <div>
             <Header />
             <div className={"mainContainer"}>
-                <h2>Change Password</h2>
-                <div className={"inputContainer"}>
-                    <input
-                        value={email}
-                        placeholder="Enter your email"
-                        onChange={(ev) => setEmail(ev.target.value)}
-                        className={"inputBox"}
-                    />
-                    <label className="errorLabel">{emailError}</label>
+                <div className={"logoContainer"}>
+                    <a href="/">
+                        <img src={logo} alt={"logo"} />
+                    </a>
                 </div>
-                <br />
+                
                 <div className={"inputContainer"}>
                     <input
                         type="password"
                         value={currentPassword}
-                        placeholder="Enter your current password"
+                        placeholder="Please enter a new password"
                         onChange={(ev) => setCurrentPassword(ev.target.value)}
                         className={"inputBox"}
                     />
@@ -108,7 +101,7 @@ const Recover = () => {
                     <input
                         type="password"
                         value={newPassword}
-                        placeholder="Enter your new password"
+                        placeholder="Enter your new password again"
                         onChange={(ev) => setNewPassword(ev.target.value)}
                         className={"inputBox"}
                     />

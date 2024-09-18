@@ -9,6 +9,7 @@ import Services from "./components/Services";
 import About from "./components/About";
 import Contact from "./components/Contact";
 import Recover from "./components/Recover";
+import EmailVerification from "./components/EmailVerification";
 
 function App() {
     return (
@@ -24,6 +25,7 @@ function App() {
                     <Route path="/about" element={<About />} />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/recover" element={<Recover />} />
+                    <Route path="/emailverification" element={<EmailVerification />} />
                 </Routes>
             </BrowserRouter>
         </div>

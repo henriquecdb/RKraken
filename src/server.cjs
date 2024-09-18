@@ -73,17 +73,17 @@ app.post("/register", (req, res) => {
     db.query(sqlCheckEmail, [email], (error, results) => {
         if (error) {
             console.error("Database query failed:", error.stack);
-            return res.status(500).send("Erro no servidor.");
+            return res.status(500).json({success: false, message: "Erro no servidor."});
         }
 
         if (results.length > 0) {
-            return res.status(400).send("Email já cadastrado.");
+            return res.status(400).json({success: false, message: "Email já possui cadastro."});
         }
 
         bcrypt.hash(password, 10, (error, hash) => {
             if (error) {
                 console.error("Bcrypt hashing failed:", error.stack);
-                return res.status(500).send("Erro ao criptografar senha.");
+                return res.status(500).json({success: false, message: "Erro ao criptografar senha."});
             }
 
             const sqlInsert =
@@ -91,7 +91,7 @@ app.post("/register", (req, res) => {
             db.query(sqlInsert, [name, email, hash], (error, result) => {
                 if (error) {
                     console.error("Database insertion failed:", error.stack);
-                    return res.status(500).send("Erro ao registrar usuário.");
+                    return res.status(500).json({success: false, message: "Erro ao registrar usuário."});
                 }
 
                 sendEmail(
@@ -99,7 +99,7 @@ app.post("/register", (req, res) => {
                     "Bem-vindo ao nosso site!",
                     "Obrigado por se registrar."
                 );
-                res.send("Usuário registrado com sucesso.");
+                res.json({success: true, message: "Usuário registrado com sucesso."});
             });
         });
     });
@@ -189,56 +189,97 @@ app.post("/recover", (req, res) => {
                 .status(400)
                 .json({ success: false, message: "Usuário não encontrado." });
         }
-
-        bcrypt.compare(
-            currentPassword,
-            result[0].password,
-            (err, compareResult) => {
-                if (err) {
-                    console.error("Bcrypt comparison failed:", err.stack);
-                    return res.status(500).json({
-                        success: false,
-                        message: "Erro ao comparar senhas.",
-                    });
-                }
-
-                if (!compareResult) {
-                    return res.status(400).json({
-                        success: false,
-                        message: "Senha atual incorreta.",
-                    });
-                }
-
-                bcrypt.hash(newPassword, 10, (error, hash) => {
-                    if (error) {
-                        console.error("Bcrypt hashing failed:", error.stack);
-                        return res.status(500).json({
-                            success: false,
-                            message: "Erro ao criptografar nova senha.",
-                        });
-                    }
-
-                    const sqlUpdate =
-                        "UPDATE users SET password = ? WHERE email = ?";
-                    db.query(sqlUpdate, [hash, email], (error, result) => {
-                        if (error) {
-                            console.error(
-                                "Database update failed:",
-                                error.stack
-                            );
-                            return res.status(500).json({
-                                success: false,
-                                message: "Erro ao atualizar a senha.",
-                            });
-                        }
-
-                        res.json({
-                            success: true,
-                            message: "Senha alterada com sucesso.",
-                        });
-                    });
+        
+        bcrypt.hash(newPassword, 10, (error, hash) => {
+            if (error) {
+                console.error("Bcrypt hashing failed:", error.stack);
+                return res.status(500).json({
+                    success: false,
+                    message: "Erro ao criptografar nova senha.",
                 });
             }
-        );
+
+            const sqlUpdate =
+                "UPDATE users SET password = ? WHERE email = ?";
+            db.query(sqlUpdate, [hash, email], (error, result) => {
+                if (error) {
+                    console.error(
+                        "Database update failed:",
+                        error.stack
+                    );
+                    return res.status(500).json({
+                        success: false,
+                        message: "Erro ao atualizar a senha.",
+                    });
+                }
+
+                res.json({
+                    success: true,
+                    message: "Senha alterada com sucesso.",
+                });
+            });
+        });
+            
+    });
+});
+
+app.post("/set-verification-code", (req, res) => {
+    const { email, code } = req.body;
+
+    const sqlSelect = "SELECT * FROM users WHERE email = ?";
+    db.query(sqlSelect, [email], (error, result) => {
+        if (error) {
+            console.error("Database selection failed:", error.stack);
+            return res
+                .status(500)
+                .json({ success: false, message: "Erro no servidor." });
+        }
+
+        if (result.length > 0) {
+            const sqlUpdate = "UPDATE users SET pwd_ver_code = ? WHERE email = ?";
+            db.query(sqlUpdate, [code, email], (error, result) => {
+                if (error) {
+                    console.error(
+                        "Database update failed:",
+                        error.stack
+                    );
+                    return res.status(500).json({
+                        success: false,
+                        message: "Erro ao gerar codigo de verificacao.",
+                    });
+                }
+
+                sendEmail(
+                    email,
+                    "Pedido de alteracao de senha",
+                    "Seu codigo de verificacao e: " + code
+                );
+
+                res.json({
+                    success: true,
+                    message: "Codigo de verificacao gerado com sucesso.",
+                });
+            });
+        } else {
+            res.json({ success: false, message: "User doesn't exist" });
+        }
+    });
+});
+
+app.get("/get-verification-code/:user", async (req, res) => {
+    const email = [req.params.user];
+    const sqlSelect = "SELECT pwd_ver_code FROM users WHERE email = ?";
+    db.query(sqlSelect, [email], (error, result) => {
+        if (error) {
+            console.error("Database selection failed:", error.stack);
+            res.status(500).json({ success: false, message: "Failed to retrieve user" });
+            return;
+        }
+        
+        console.log();
+        
+        if(result.length > 0) {
+           return res.json({success: true, code: result[0].pwd_ver_code});
+        } 
     });
 });
