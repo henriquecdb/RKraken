@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import logo from "../assets/escritaokt.png";
 import Header from "./Header";
 import Footer from "./Footer";
+import { setDataStorage, getDataStorage } from "./Storage";
 
-const LoginPage = (props) => {
+const LoginPage = () => {
+    const loggedIn = getDataStorage("logged");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [emailError, setEmailError] = useState("");
@@ -49,6 +51,9 @@ const LoginPage = (props) => {
             .then((response) => response.json())
             .then((data) => {
                 if (data.loggedIn) {
+                    setDataStorage("logged", true);
+                    setDataStorage("email", email);
+                    setDataStorage("username", data.user.name);
                     navigate("/");
                 } else {
                     alert(data.message);
@@ -69,9 +74,7 @@ const LoginPage = (props) => {
                     </a>
                 </div>
 
-                <div className={"titleContainer"}>
-                    {/*<div>Login</div>*/}
-                </div>
+                <div className={"titleContainer"}>{/*<div>Login</div>*/}</div>
                 <br />
                 <div className={"inputContainer"}>
                     <input
@@ -92,6 +95,11 @@ const LoginPage = (props) => {
                         className={"inputBox"}
                     />
                     <label className="errorLabel">{passwordError}</label>
+                </div>
+                <div className="inputContainer">
+                    <Link to="/emailverification">
+                        Forgot your password? Change it here
+                    </Link>
                 </div>
                 <br />
                 <div className={"inputContainer"}>
