@@ -41,3 +41,9 @@ a:hover {
     text-decoration: underline;
     color: blue;
 }
+
+.logoContainer {
+    margin-left: 150px;
+    text-align: center;
+    font-size: larger;
+}

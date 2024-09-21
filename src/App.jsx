@@ -9,6 +9,7 @@ import ProblemList from "./components/ProblemList";
 import Services from "./components/Services";
 import About from "./components/About";
 import Contact from "./components/Contact";
+import Ranking from "./components/Ranking";
 
 function App() {
     const [loggedIn, setLoggedIn] = useState(false);
@@ -43,6 +44,7 @@ function App() {
                     <Route path="/services" element={<Services />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/contact" element={<Contact />} />
+                    <Route path="/ranking" element={<Ranking />} />
                     
                     
                 </Routes>

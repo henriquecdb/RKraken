@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Header from "./Header";
 import Footer from "./Footer";
-import "./Services.css";
+import "./Tables.css";
 
 function Services() {
     const [contests, setContests] = useState([]);
@@ -41,8 +41,8 @@ function Services() {
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Nome</th>
-                                <th>Início</th>
+                                <th>Name</th>
+                                <th>Start</th>
                             </tr>
                         </thead>
                         <tbody>
