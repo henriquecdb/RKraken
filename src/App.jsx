@@ -12,6 +12,7 @@ import Ranking from "./components/Ranking";
 import Recover from "./components/Recover";
 import EmailVerification from "./components/EmailVerification";
 import CFproblens from "./components/CFproblens";
+import Submite from "./components/Submite";
 
 function App() {
     return (
@@ -30,6 +31,7 @@ function App() {
                     <Route path="/cfproblens" element={<CFproblens />} />
                     <Route path="/recover" element={<Recover />} />
                     <Route path="/emailverification" element={<EmailVerification />} />
+                    <Route path="/submite" element={<Submite />}/>
                 </Routes>
             </BrowserRouter>
         </div>
