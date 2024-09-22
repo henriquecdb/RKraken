@@ -11,6 +11,7 @@ import Contact from "./components/Contact";
 import Ranking from "./components/Ranking";
 import Recover from "./components/Recover";
 import EmailVerification from "./components/EmailVerification";
+import CFproblens from "./components/CFproblens";
 
 function App() {
     return (
@@ -26,8 +27,7 @@ function App() {
                     <Route path="/about" element={<About />} />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/ranking" element={<Ranking />} />
-                    
-                    
+                    <Route path="/cfproblens" element={<CFproblens />} />
                     <Route path="/recover" element={<Recover />} />
                     <Route path="/emailverification" element={<EmailVerification />} />
                 </Routes>

@@ -1,77 +1,29 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import Header from "./Header";
 import Footer from "./Footer";
-import "./Tables.css";
+import "./Services.css";
 
 function Services() {
     const [contests, setContests] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    useEffect(() => {
-        const fetchContests = async () => {
-            try {
-                const response = await axios.get(
-                    "https://codeforces.com/api/contest.list?gym=false"
-                );
-                const activeContests = response.data.result.filter(
-                    (contest) =>
-                        contest.phase === "BEFORE" || contest.phase === "CODING"
-                );
-                setContests(activeContests);
-            } catch (error) {
-                setError("Erro ao carregar as competições.");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchContests();
-    }, []);
-
     return (
         <div className="general">
             <Header />
-            <div className="container">
-                {loading && <p>Carregando...</p>}
-                {error && <p>{error}</p>}
-                {!loading && !error && (
-                    <table className="contest-table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Start</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {contests.map((contest) => (
-                                <tr key={contest.id}>
-                                    <td>{contest.id}</td>
-                                    <td>
-                                        <a
-                                            href={`https://codeforces.com/contests/${contest.id}`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            {contest.name}
-                                        </a>
-                                    </td>
-                                    <td>
-                                        {new Date(
-                                            contest.startTimeSeconds * 1000
-                                        ).toLocaleString()}
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                )}
+            <div className="mainContainer">
+                <div className="Servcontainer">
+                    <div className="CodeForce">
+                        <h1>teste</h1>
+                    </div>
+                    <div className="SendATV">
+                        <h1>teste</h1>
+                    </div>
+                </div>
             </div>
             <Footer />
         </div>
-    );
+    )
 }
 
 export default Services;
