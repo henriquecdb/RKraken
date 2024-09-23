@@ -34,7 +34,7 @@ function CFproblens() {
         <div className="general">
             <Header />
             <div className="container">
-                {loading && <p>Carregando...</p>}
+                {loading && <p>Loading...</p>}
                 {error && <p>{error}</p>}
                 {!loading && !error && (
                     <table className="contest-table">

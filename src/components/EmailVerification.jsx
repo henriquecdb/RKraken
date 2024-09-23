@@ -94,7 +94,7 @@ const Recover = () => {
             })
             .catch((error) => {
                 console.error("Error:", error);
-                alert("Ocorreu um erro ao tentar enviar o codigo de verificacao.");
+                alert("An error occurred while trying to send the verification code.");
             });
     };
 
