@@ -6,6 +6,37 @@ import "./Tables.css";
 import logo from "../assets/OktoplusHZ.png";
 
 function Services() {
+    const [status, setStatus] = useState([]);
+    const [data, setData] = useState([]);
+    const [refreshing, setRefreshing] = useState(true);
+
+    useEffect(() => {
+        async function fetchList() {
+          setRefreshing(true);
+          
+          let requestOptions = {
+            method: 'GET',
+            headers: {
+              "Content-Type": "application/json",
+          },
+            redirect: 'follow',
+          };
+    
+          fetch(
+            'http://localhost:3000/ranking',
+            requestOptions
+          )
+            .then((res) => res.json())
+            .then((resJson) => {
+              setData(resJson);
+              setRefreshing(false);
+            })
+            .catch((e) => console.log(e));
+        }
+        if(refreshing) {
+          fetchList();
+        }
+      });
 
     return (
         <div className="general">
@@ -20,21 +51,13 @@ function Services() {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Puxar do banco</td>
-                            <td>2000</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Puxar do banco</td>
-                            <td>1800</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Puxar do banco</td>
-                            <td>1600</td>
-                        </tr>
+                        {data.map((item, i) => (
+                            <tr key={i}>
+                                <td>{i + 1}</td>
+                                <td>{item.name}</td>
+                                <td>{item.nsolved * 50} </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             <div className="logoContainer">

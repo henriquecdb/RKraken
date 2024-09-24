@@ -5,8 +5,10 @@ import "./Services.css";
 import logo from "../assets/codeforces.png";
 import logoOK from "../assets/OktoplusHZ.png";
 import { useNavigate } from "react-router-dom";
+import { getDataStorage } from "./Storage";
 
 function Services() {
+    const loggedIn = getDataStorage("logged");
     const [contests, setContests] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -15,7 +17,7 @@ function Services() {
 
     const onButtonClick = (buttonType) => {
 
-        buttonType == "cfproblens" ? navigate("/cfproblens") : navigate("/problemlist");
+        buttonType == "cfproblens" ? navigate("/cfproblens") : loggedIn ? navigate("/problemlist") : navigate("/login");
 
     };
 

@@ -54,6 +54,7 @@ const LoginPage = () => {
                     setDataStorage("logged", true);
                     setDataStorage("email", email);
                     setDataStorage("username", data.user.name);
+                    setDataStorage("userId", data.user.id);
                     navigate("/");
                 } else {
                     alert(data.message);

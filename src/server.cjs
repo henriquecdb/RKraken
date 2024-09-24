@@ -283,3 +283,198 @@ app.get("/get-verification-code/:user", async (req, res) => {
         } 
     });
 });
+
+app.post("/submit", async (req, res) => {
+    const { code, problemId } = req.body;
+    const { exec } = require("child_process");
+    let testcases = [];
+    const sqlSelect = "SELECT input, output FROM testcases WHERE fk_problem = ?";
+    db.query(sqlSelect, [problemId], (error, result) => {
+        if (error) {
+            console.error("Database selection failed:", error.stack);
+            res.status(500).send("Failed to retrieve testcases");
+            return;
+        }
+        
+        if(result.length > 0) {
+            console.log(result[0]["input"]);
+            const test = result[0];
+            console.log(test["output"]);
+            testcases = result[0];
+            console.log(testcases["input"]);
+
+            //Criando arquivo com o codigo do usuario
+            exec(`printf '%s' '${String.raw`${code}`}' > main.cpp`, (error, stdout, stderr) => {
+                console.log(code);
+                if(error) {
+                    console.log(`error: ${error.message}`);
+                    return res.json({ success: false, message: error.message});
+                }
+
+                if(stderr) {
+                    console.log(`stderr: ${stderr}`);
+                    return res.json({ success: false, message: stderr});
+                }
+            });
+
+            //Compilando o arquivo
+            exec(`g++ main.cpp`, (error, stdout, stderr) => {
+                if(error) {
+                    console.log(`error: ${error.message}`);
+                    return res.json({ success: true, message: "Compilation Error"});
+                }
+
+                if(stderr) {
+                    console.log(`stderr: ${stderr}`);
+                    return res.json({ success: false, message: stderr});
+                }
+            });
+                    
+            
+            //Gerando arquivo de entrada
+            exec(`printf '%s' '${String.raw`${testcases["input"]}`}' > in`, (error, stdout, stderr) => {
+                if(error) {
+                    console.log(`error: ${error.message}`);
+                    return res.json({ success: false, message: error.message});
+                }
+
+                if(stderr) {
+                    console.log(`stderr: ${stderr}`);
+                    return res.json({ success: false, message: stderr});
+                }
+            });
+
+            //Gerando arquivo de saida
+            exec(`printf '%s' '${String.raw`${testcases["output"]}`}' > out`, (error, stdout, stderr) => {
+                if(error) {
+                    console.log(`error: ${error.message}`);
+                    return res.json({ success: false, message: error.message});
+                }
+
+                if(stderr) {
+                    console.log(`stderr: ${stderr}`);
+                    return res.json({ success: false, message: stderr});
+                }
+            });
+                        
+            //Executando o codigo do usuario e guardando a saida
+            exec("./a.out < in > saida", (error, stdout, stderr) => {
+                if(error) {
+                    console.log(`error: ${error.message}`);
+                    return res.json({ success: false, message: error.message});
+                }
+
+                if(stderr) {
+                    console.log(`stderr: ${stderr}`);
+                    return res.json({ success: false, message: stderr});
+                }
+            });
+
+            //Comparando a saida do usuario com a saida do problema
+            exec("diff saida out", (error, stdout, stderr) => {
+                if(error) {
+                    console.log("Failed Testcase");
+                    return res.json({success: true, message: "Wrong Answer"});
+                }
+
+                if(stderr) {
+                    console.log(`stderr: ${stderr}`);
+                    return res.json({ success: false, message: stderr});
+                }
+
+                if(stdout === "") {
+                    console.log("Accepted Testcase");
+                    return res.json({success: true, message: "Accepted"});
+                } else {
+                    console.log("Failed Testcase");
+                    return res.json({success: true, message: "Wrong Answer"});
+                }
+            });
+        } else {
+            return res.send("No testcase available");
+        }
+    });
+});
+    
+
+app.get("/status/:id", async (req, res) => {
+    const id = [req.params.id];
+    const sqlSelect = "SELECT * FROM solved WHERE fk_user = ?";
+    db.query(sqlSelect, [id], (error, result) => {
+        if (error) {
+            console.error("Database selection failed:", error.stack);
+            res.status(500).send("Failed to retrieve status");
+            return;
+        }
+        res.json(result);
+    });
+});
+
+app.post("/set-problem-status", (req, res) => {
+    const { userId, problemId, status } = req.body;
+    
+    const sqlSelect = "SELECT * FROM solved WHERE fk_user = ? AND fk_problem = ?";
+    db.query(sqlSelect, [userId, problemId], (error, result) => {
+        if (error) {
+            console.error("Database selection failed:", error.stack);
+            res.status(500).send("Failed to retrieve status");
+            return;
+        }
+
+        if(result.length > 0) {
+            const sqlUpdate = "UPDATE solved SET status = ? WHERE fk_user = ? AND fk_problem = ?";
+            db.query(sqlUpdate, [status, userId, problemId], (error, result) => {
+                if (error) {
+                    console.error(
+                        "Database update failed:",
+                        error.stack
+                    );
+                    
+                    return res.status(500).json({
+                        success: false,
+                        message: "Erro ao atualizar status",
+                    });
+                }
+
+                return res.json({
+                    success: true,
+                    message: "Status atualizado com sucesso.",
+                });
+            });
+        } else {
+            const sqlInsert = "INSERT INTO solved (fk_user, fk_problem, status) VALUES (?, ?, ?)";
+            db.query(sqlInsert, [userId, problemId, status], (error, result) => {
+                if (error) {
+                    console.error(
+                        "Database insert failed:",
+                        error.stack
+                    );
+
+                    return res.status(500).json({
+                        success: false,
+                        message: "Erro ao inserir novo registro",
+                    });
+                }
+                
+                return res.json({
+                    success: true,
+                    message: "Status inserido com sucesso.",
+                });
+            });
+        }
+    });
+});
+
+
+// Buscar os usuarios ordenados por ranking
+app.get("/ranking", async (req, res) => {
+    const sqlSelect = "select name, count(id) as nsolved from users join solved on users.id = solved.fk_user group by id order by count(id) desc;";
+    db.query(sqlSelect, (error, result) => {
+        if (error) {
+            console.error("Database selection failed:", error.stack);
+            res.status(500).send("Failed to retrieve problems");
+            return;
+        }
+        res.json(result);
+    });
+});

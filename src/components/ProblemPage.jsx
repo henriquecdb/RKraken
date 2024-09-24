@@ -5,11 +5,17 @@ import Header from "./Header";
 import Footer from "./Footer";
 
 function ProblemPage() {
+  const navigate = useNavigate();
+
   const location = useLocation();
   const id = location.state.id;
   
   const [data, setData] = useState([]);
   const [refreshing, setRefreshing] = useState(true);
+
+  function submitPage() {
+    navigate("/submite", { state: { id: id } });
+  }
 
   useEffect(() => {
     async function fetchList() {
@@ -39,8 +45,6 @@ function ProblemPage() {
     }
   });
 
-  console.log(data);
-
 
   return (
     <div className="general">
@@ -65,9 +69,9 @@ function ProblemPage() {
                 <div>
                   <p>{item.testcase}</p>
                 </div>
-              </div>
+                <input type="button" value="Submit" onClick={submitPage}/>
+              </div>  
             ))}
-            <input type="button" value="Submit" />
           </div>
         </div>
       </div>
